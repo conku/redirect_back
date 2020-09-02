@@ -2,9 +2,7 @@ package redirect_back
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"net/url"
 	"path/filepath"
 	"strings"
 
@@ -109,19 +107,35 @@ func (redirectBack *RedirectBack) compile() {
 
 // RedirectBack redirect back to last visited page
 func (redirectBack *RedirectBack) RedirectBack(w http.ResponseWriter, req *http.Request) {
-	returnTo := req.Context().Value(returnToKey)
 
-	if returnTo != nil {
-		http.Redirect(w, req, fmt.Sprint(returnTo), http.StatusSeeOther)
-		return
-	}
+	// returnTo := req.Context().Value(returnToKey)
 
-	if referrer := req.Referer(); referrer != "" {
-		if u, _ := url.Parse(referrer); !redirectBack.IgnorePath(u.Path) {
-			http.Redirect(w, req, referrer, http.StatusSeeOther)
-			return
-		}
-	}
+	// if returnTo != nil {
+	// 	fmt.Println("returnTo1", returnTo)
+
+	// 	fmt.Println("returnTo1", fmt.Sprint(returnTo))
+	// 	http.Redirect(w, req, fmt.Sprint(returnTo), http.StatusSeeOther)
+	// 	return
+	// } else {
+	// 	fmt.Println("returnTo2", returnTo)
+	// }
+
+	// referrer := req.Referer()
+
+	// if referrer != "" {
+
+	// 	fmt.Println("referrer1", referrer)
+	// 	if u, _ := url.Parse(referrer); !redirectBack.IgnorePath(u.Path) {
+
+	// 		fmt.Println("referrer2", referrer)
+	// 		http.Redirect(w, req, referrer, http.StatusSeeOther)
+	// 		return
+	// 	}
+	// }
+
+	// fmt.Println("referrer3", referrer)
+
+	// fmt.Println(redirectBack.config.FallbackPath)
 
 	http.Redirect(w, req, redirectBack.config.FallbackPath, http.StatusSeeOther)
 }
